@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\GraphQL\Mutations\Category;
 
 use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
+  
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
+use App\Category;
 
 class DeleteCategoryMutation extends Mutation
 {
@@ -19,22 +19,22 @@ class DeleteCategoryMutation extends Mutation
 
     public function type(): Type
     {
-        return Type::listOf(Type::string());
+        return Type::boolean();
     }
 
     public function args(): array
     {
-        return [
-
-        ];
+        'id' => [
+            'name'  => 'id',
+            'type'  => Type::int(),
+            'rules' => ['required', 'numeric', 'min:1', 'exists:categories,id']
+        ]
     }
 
-    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    public function resolve($root, $args)
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
+        $category = Category::findOrFail($args['id']);
 
-        return [];
+        return  $category->delete() ? true : false;
     }
 }

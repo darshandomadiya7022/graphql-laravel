@@ -36,7 +36,7 @@ class DeleteUserMutation extends Mutation
         ]
     }
 
-    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    public function resolve($root, $args)
     {
         /*$fields = $getSelectFields();
         $select = $fields->getSelect();

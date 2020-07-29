@@ -28,6 +28,21 @@ class CategoryType extends GraphQLType
                 'type' => Type::string(),
                 'description' => 'The name of the product'
             ], 
+            'products' => [
+                'type' => Type::nonNull(Type::listOf(Type::nonNull(GraphQL::type('products')))),
+                'description' => 'The models belonging to the Product',
+                'args' => [
+                    'id' => ['type' => Type::int()],
+                ],
+                'query' => function (array $args, HasMany $query) {
+                    if (isset($args['id'])) {
+                        return $query->where('id', $args['id']);
+                    }
+                    else {
+                        return $query;
+                    }
+                },
+            ],
         ];
     }
 }

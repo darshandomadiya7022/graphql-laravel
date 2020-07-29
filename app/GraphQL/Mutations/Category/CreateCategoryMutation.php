@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations\Category;
 
-use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
+use Closure; 
+use GraphQL; 
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
+use Illuminate\Validation\Rule;
+use App\Models\Category;
 
 class CreateCategoryMutation extends Mutation
 {
@@ -18,23 +19,27 @@ class CreateCategoryMutation extends Mutation
     ];
 
     public function type(): Type
-    {
-        return Type::listOf(Type::string());
+    { 
+        return GraphQL::type('category');
     }
 
     public function args(): array
     {
         return [
-
+            'name' => [
+                'name' => 'name',
+                'type' =>  Type::nonNull(Type::string()),
+                'rules' => ['required','max:50']
+            ], 
         ];
     }
 
-    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    public function resolve($root, $args)
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
+        $category = new Category();
+        $category->fill($args);
+        $category->save();
 
-        return [];
+        return $category;
     }
 }

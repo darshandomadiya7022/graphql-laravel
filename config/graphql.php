@@ -112,6 +112,16 @@ return [
                 'createUser' => App\GraphQL\Mutations\CreateUserMutation::class,
                 //update a user
                 'updateUser' => App\GraphQL\Mutations\UpdateUserMutation::class,
+
+                //create a Category
+                'createCategory' => App\GraphQL\Mutations\Category\CreateCategoryMutation::class,
+                //update a Category
+                'updateCategory' => App\GraphQL\Mutations\Category\UpdateCategoryMutation::class,
+ 
+                //create a Product
+                'createProduct' => App\GraphQL\Mutations\Products\CreateProductMutation::class,
+                //update a Product
+                'updateProduct' => App\GraphQL\Mutations\Products\UpdateProductMutation::class,
             ],
             'middleware' => [],
             'method' => ['post'],

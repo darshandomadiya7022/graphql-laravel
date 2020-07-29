@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Mutations\Products;
 
-use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
+use Closure; 
+use GraphQL; 
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\SelectFields;
+use Illuminate\Validation\Rule;
+use App\Models\Product;
 
 class CreateProductMutation extends Mutation
 {
@@ -19,22 +20,36 @@ class CreateProductMutation extends Mutation
 
     public function type(): Type
     {
-        return Type::listOf(Type::string());
+        return GraphQL::type('products');
     }
 
     public function args(): array
     {
-        return [
-
+        return [ 
+            'category_id' => [
+                'name' => 'category_id',
+                'type' =>  Type::nonNull(Type::int()),
+                'rules' => ['required']
+            ], 
+            'name' => [
+                'name' => 'name',
+                'type' =>  Type::nonNull(Type::string()),
+                'rules' => ['required','max:50']
+            ], 
+            'price' => [
+                'name' => 'price',
+                'type' =>  Type::nonNull(Type::float()),
+                'rules' => ['required']
+            ], 
         ];
     }
 
-    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    public function resolve($root, $args)
     {
-        $fields = $getSelectFields();
-        $select = $fields->getSelect();
-        $with = $fields->getRelations();
+        $product = new Product();
+        $product->fill($args);
+        $product->save();
 
-        return [];
+        return $product;
     }
 }
