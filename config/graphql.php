@@ -125,7 +125,6 @@ return [
             ],
             'middleware' => [],
             'method' => ['post'],
-
         ],
         'public' => [
             'query' => [],
